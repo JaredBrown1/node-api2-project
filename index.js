@@ -1,15 +1,7 @@
-const express = require("express");
-
-const server = express();
-
-server.use(express.json());
-
-server.get("/", (req, res) => {
-  res.json({ message: "hello world" });
-});
+const app = require("./server.js");
 
 const PORT = 4000;
 
-server.listen(PORT, () => {
+app.listen(PORT, () => {
   console.log(`listening on port ${PORT}`);
 });
