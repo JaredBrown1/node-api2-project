@@ -4,19 +4,7 @@ const Posts = require("./data/db.js");
 
 const router = express.Router();
 
-router.get("/", (req, res) => {
-  Posts.find(req.query)
-    .then((posts) => {
-      res.status(200).json(posts);
-    })
-    .catch((error) => {
-      console.log(error);
-      res.status(500).json({
-        message: "Error retrieving the posts",
-      });
-    });
-});
-
+//POST to /api/posts
 router.post("/", (req, res) => {
   const postInfo = req.body;
   if (!postInfo.title || !postInfo.contents) {
@@ -35,17 +23,41 @@ router.post("/", (req, res) => {
         });
       });
   }
+});
 
-  // Posts.insert(req.body)
-  //   .then((post) => {
-  //     res.status(201).json(post);
-  //   })
-  //   .catch((error) => {
-  //     console.log(error);
-  //     res.status(500).json({
-  //       message: "Error add the post",
-  //     });
-  //   });
+router.post("/:id/comments", (req, res) => {
+  const postInfo = req.body;
+  Posts.insert(postInfo).then((post) => {
+    res.status(201).json(post);
+  });
+});
+
+//GET array of posts
+router.get("/", (req, res) => {
+  Posts.find(req.query)
+    .then((posts) => {
+      res.status(200).json(posts);
+    })
+    .catch((error) => {
+      console.log(error);
+      res.status(500).json({
+        message: "Error retrieving the posts",
+      });
+    });
+});
+
+// GET array of posts byh ID
+router.get("/:id", (req, res) => {
+  Posts.findById(req.params.id)
+    .then((posts) => {
+      res.status(200).json(posts);
+    })
+    .catch((error) => {
+      console.log(error);
+      res.status(500).json({
+        message: "Error retriving the posts",
+      });
+    });
 });
 
 module.exports = router;
