@@ -25,12 +25,20 @@ router.post("/", (req, res) => {
   }
 });
 
-router.post("/:id/comments", (req, res) => {
-  const postInfo = req.body;
-  Posts.insertComment(postInfo).then((post) => {
-    res.status(201).json(post);
-  });
-});
+//POST new comment to /:id/comments
+// router.post("/:id/comments", (req, res) => {
+//   const postInfo = req.params.id;
+//   Posts.insertComment(postInfo)
+//     .then((post) => {
+//       res.status(201).json(post);
+//     })
+//     .catch((error) => {
+//       console.log("error: ", error);
+//       res.status(500).json({
+//         error: "There was an error while creating a new comment",
+//       });
+//     });
+// });
 
 //GET array of posts
 router.get("/", (req, res) => {
@@ -70,6 +78,23 @@ router.get("/:id/comments", (req, res) => {
       console.log(error);
       res.status(500).json({
         message: "Error retrieving comment",
+      });
+    });
+});
+
+router.delete("/:id", (req, res) => {
+  Posts.remove(req.params.id)
+    .then((count) => {
+      if (count > 0) {
+        res.status(200).json({ message: "The post has been deleted" });
+      } else {
+        res.status(404).json({ message: "The post could not be found" });
+      }
+    })
+    .catch((error) => {
+      console.log(error);
+      res.status(500).json({
+        message: "Error removing the post",
       });
     });
 });
