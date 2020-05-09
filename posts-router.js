@@ -27,7 +27,7 @@ router.post("/", (req, res) => {
 
 router.post("/:id/comments", (req, res) => {
   const postInfo = req.body;
-  Posts.insert(postInfo).then((post) => {
+  Posts.insertComment(postInfo).then((post) => {
     res.status(201).json(post);
   });
 });
@@ -46,7 +46,7 @@ router.get("/", (req, res) => {
     });
 });
 
-// GET array of posts byh ID
+// GET array of posts by ID
 router.get("/:id", (req, res) => {
   Posts.findById(req.params.id)
     .then((posts) => {
@@ -55,7 +55,21 @@ router.get("/:id", (req, res) => {
     .catch((error) => {
       console.log(error);
       res.status(500).json({
-        message: "Error retriving the posts",
+        message: "Error retrieving the posts",
+      });
+    });
+});
+
+// GET array of comment objects by specific id
+router.get("/:id/comments", (req, res) => {
+  Posts.findCommentById(req.params.id)
+    .then((posts) => {
+      res.status(200).json(posts);
+    })
+    .catch((error) => {
+      console.log(error);
+      res.status(500).json({
+        message: "Error retrieving comment",
       });
     });
 });
